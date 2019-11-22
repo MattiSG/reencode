@@ -1,5 +1,11 @@
 #!/bin/bash
 
+encoder=${ENCODER:-libx265}  # libx265 = HEVC, little support but much smaller filesize; libx264 = H.264, very wide support
+quality=${QUALITY:-28}  # ok quality = 28 for HEVC, 23 for H264; great quality = 22 for HEVC, 20 for H264
+scale=$SCALE  # decrease size of full HD streams: set to 1280:720; leave empty for no downscaling
+audio_bitrate=${BITRATE:-80k}  # decrease audio quality to something acceptable for voice; set to 180k for precise music; leave empty to remove audio
+frame_rate=$FRAME_RATE  # set to 12 for video call archives
+
 if [[ $1 == '--dry-run' ]]
 then
 	dry_run=true
@@ -11,16 +17,7 @@ then source_files="*.[mM][pPoO4][4gGvV]"
 else source_files="$@"
 fi
 
-
-TARGET_DIR_PREFIX="Reencoded"
-
-encoder=libx265  # libx265 = HEVC, little support but much smaller filesize; libx264 = H.264, very wide support
-quality=28  # ok quality = 28 for HEVC, 23 for H264; great quality = 22 for HEVC, 20 for H264
-scale=""  # decrease size of full HD streams: set to 1280:720; leave empty for no downscaling
-audio_bitrate="80k"  # decrease audio quality to something acceptable for voice; set to 180k for precise music; leave empty to remove audio
-frame_rate=""  # set to 12 for video call archives
-
-target_dir="$TARGET_DIR_PREFIX-$encoder-$quality"
+target_dir="Reencoded-$encoder-$quality"
 
 shared_options=""
 shared_options="$shared_options -crf $quality"
@@ -70,4 +67,3 @@ do
 		touch -r "$1" "$target_dir/$filename.$encoder.mp4"  # copy mtime and ctime
 	fi
 done
-
