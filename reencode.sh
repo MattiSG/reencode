@@ -5,6 +5,7 @@ quality=${QUALITY:-28}  # ok quality = 28 for HEVC, 23 for H264; great quality =
 scale=$SCALE  # decrease size of full HD streams: set to 1280:720; leave empty for no downscaling
 audio_bitrate=${BITRATE:-80k}  # decrease audio quality to something acceptable for voice; set to 180k for precise music; leave empty to remove audio
 frame_rate=$FRAMERATE  # set to 12 for video call archives
+speed=${SPEED:-veryslow}  # more compute power against smaller size
 
 if [[ $1 == '--dry-run' ]]
 then
@@ -21,7 +22,7 @@ target_dir="Reencoded-$encoder-$quality"
 
 shared_options=""
 shared_options="$shared_options -crf $quality"
-shared_options="$shared_options -preset veryslow"  # more compute power against smaller size
+shared_options="$shared_options -preset $speed"
 shared_options="$shared_options -codec:v $encoder"
 shared_options="$shared_options -filter:v format=yuv420p"  # ensure QuickTime can read resulting file
 
