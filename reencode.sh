@@ -4,7 +4,7 @@ encoder=${ENCODER:-libx265}  # libx265 = HEVC, little support but much smaller f
 quality=${QUALITY:-28}  # ok quality = 28 for HEVC, 23 for H264; great quality = 22 for HEVC, 20 for H264
 scale=$SCALE  # decrease size of full HD streams: set to 1280:720; leave empty for no downscaling
 audio_bitrate=${BITRATE:-80k}  # decrease audio quality to something acceptable for voice; set to 180k for precise music; leave empty to remove audio
-frame_rate=$FRAME_RATE  # set to 12 for video call archives
+frame_rate=$FRAMERATE  # set to 12 for video call archives
 
 if [[ $1 == '--dry-run' ]]
 then
