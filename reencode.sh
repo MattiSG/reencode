@@ -13,6 +13,12 @@ then
 	shift
 fi
 
+if [[ $1 == '--in-place' ]]
+then
+	in_place=true
+	shift
+fi
+
 if [[ $# == 0 ]]
 then source_files="*.[mM][pPoO4][4gGvV]"
 else source_files="$@"
@@ -58,9 +64,17 @@ do
 	command=`reencode_command "$file" "$target_file"`
 
 	if [[ $dry_run ]]
-	then echo $command
-	else
-		bash -c "$command"
-		touch -r "$file" "$target_file"  # copy mtime and ctime
+	then
+		echo $command
+		continue
+	fi
+
+	bash -c "$command"
+	touch -r "$file" "$target_file"  # copy mtime and ctime
+
+	if [[ $in_place ]]
+	then
+		mv "$file" "$HOME/.Trash/$file"
+		mv "$target_file" "$file"
 	fi
 done
