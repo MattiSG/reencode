@@ -18,8 +18,6 @@ then source_files="*.[mM][pPoO4][4gGvV]"
 else source_files="$@"
 fi
 
-target_dir="Reencoded-$encoder-$quality"
-
 shared_options=""
 shared_options="$shared_options -crf $quality"
 shared_options="$shared_options -preset $speed"
@@ -42,29 +40,27 @@ else shared_options="$shared_options -an"
 fi
 shared_options="$shared_options -movflags +faststart"  # ensure internet streaming is smooth
 
-reencode_command() {
+reencode_command() {  # $1 = source file, $2 = target file
 	filename=`echo "$1" | rev | cut -d '.' -f 2- | rev`  # remove extension
 
 	if [[ -e "$filename.jpg" ]]
 	then local file_specific_options="-attach '$filename.jpg'"  # add cover artwork
 	fi
 
-	echo ffmpeg -i "'$1'" $shared_options $file_specific_options "'$target_dir/$filename.$encoder.mp4'"
+	echo ffmpeg -i "'$1'" $shared_options $file_specific_options "'$2'"
 }
 
 
-if ! [[ $dry_run ]]
-then mkdir "$target_dir"
-fi
-
 for file in $source_files
 do
-	command=`reencode_command "$file"`
+	target_file="${file%.*}.$encoder-$quality.mp4"
+
+	command=`reencode_command "$file" "$target_file"`
 
 	if [[ $dry_run ]]
 	then echo $command
 	else
 		bash -c "$command"
-		touch -r "$1" "$target_dir/$filename.$encoder.mp4"  # copy mtime and ctime
+		touch -r "$file" "$target_file"  # copy mtime and ctime
 	fi
 done
