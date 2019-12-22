@@ -72,6 +72,7 @@ do
 
 	bash -c "$command"
 	touch -r "$file" "$target_file"  # copy mtime and ctime
+	xattr -w com.apple.metadata:_kMDItemUserTags '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><array><string>Reencoded</string></array></plist>' "$target_file"  # add "Reencoded" Finder tag
 
 	if [[ $in_place ]]
 	then
