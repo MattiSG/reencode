@@ -29,6 +29,7 @@ shared_options="$shared_options -crf $quality"
 shared_options="$shared_options -preset $speed"
 shared_options="$shared_options -codec:v $encoder"
 shared_options="$shared_options -filter:v format=yuv420p"  # ensure QuickTime can read resulting file
+shared_options="$shared_options -map_metadata 0"  # copy all metadata
 
 
 if [[ $encoder == 'libx265' ]]
