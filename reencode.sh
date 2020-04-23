@@ -20,7 +20,7 @@ then
 fi
 
 if [[ $# == 0 ]]
-then source_files="*.[mM][pPoO4][4gGvV]"
+then source_files='*.[mM][pPoO4][4gGvV]'
 else source_files="$@"
 fi
 
@@ -58,7 +58,7 @@ reencode_command() {  # $1 = source file, $2 = target file
 }
 
 
-for file in $source_files
+find . -iname "$source_files" | while read file
 do
 	target_file="${file%.*}.$encoder-$quality.mp4"
 
